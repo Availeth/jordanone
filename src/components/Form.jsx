@@ -1,30 +1,36 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import '../index.css'
-// import { send } from 'vite';
 
 const Form = () => {
     const form = useRef();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFormSent, setIsFormSent] = useState(false);
+
 
     const sendEmail = (e) => {
       e.preventDefault();
-  
+      setIsLoading(true);
       emailjs.sendForm( 'service_9ba6d6h', 'template_84wvdek', form.current, 'Z6jPU9UZXIOi41H5-')
         .then((result) => {
             console.log(result.text);
+            setIsFormSent(true);
+
         }, (error) => {
             console.log(error.text);
+            setIsLoading(false);
+
         });
     };
   
     return (
-    <form ref={form} onSubmit={sendEmail} className="formc ">
+    <form ref={form} onSubmit={sendEmail} className="formc">
 
       <div className="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-        <div className="relative mx-4 -mt-6 mb-4 grid h-28 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-cyan-600 to-cyan-400 bg-clip-border text-white shadow-lg shadow-cyan-500/40">
-        <div className='font-kal text-xl font-bold text-white pt-2 '>JORDAN IREWOLETOMIWA</div>
-        <div className='font-kal text-xl font-bold text-white '>ARISE @ One</div>
-          <h3 className="block font-sans text-3xl font-semibold leading-snug tracking-normal text-white antialiased">
+        <div className=" max-h-max md:max-h-max relative mx-4 -mt-6 mb-4 grid py-5 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-cyan-600 to-cyan-400 bg-clip-border text-white shadow-lg shadow-cyan-500/40">
+        <div className='font-kal text-xl font-bold text-white pt-2 leading-snug'>JORDAN IREWOLETOMIWA</div>
+        <div className='font-kal text-xl font-bold text-white leading-snug '>ARISE @ ONE</div>
+          <h3 className=" block font-sans text-3xl font-semibold leading-snug tracking-normal text-white antialiased">
             E-Invite
           </h3>
         </div>
@@ -41,8 +47,11 @@ const Form = () => {
           </div>
           <div className="relative h-11 w-full min-w-[200px]">
             <input
+            
             name='adult_guest_number'
             type="number"
+            min={1}
+            max={5}
               placeholder=""
               className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-cyan-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
             />
@@ -88,13 +97,27 @@ const Form = () => {
           value="send"
             data-ripple-light="true"
             type="submit"
-            className="block w-full select-none rounded-lg bg-gradient-to-tr from-cyan-600 to-cyan-400 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-cyan-500/20 transition-all hover:shadow-lg hover:shadow-cyan-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            disabled={isLoading}
+            className=" block w-full select-none rounded-lg bg-gradient-to-tr from-cyan-600 to-cyan-400 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-cyan-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           >
             Submit
           </button>
+          {isLoading &&  <p><div className=" py-5 flex flex-row  place-item-center justify-center gap-2">
+  <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]"></div>
+  <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.3s]"></div>
+  <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]"></div>
+</div></p>}
+          {isFormSent && <p className='text-red-500'>Invite Accepted successfully!</p>}
+
+
         </div>
+
         <div className='flex px-5'>
-        <img src="src/assets/location (1).png" className='w-[15%]' alt="" />
+        <img src="https://res.cloudinary.com/dlhfuhlu8/image/upload/v1702569761/calendar_1_vuzoeu.png" className='w-[15%]' alt="" />
+        <p className='py-4 pl-5 font-kal font-bold'>27th of Janaury 2024</p>
+        </div>
+        <div className='flex py-2 px-5'>
+        <img src="https://res.cloudinary.com/dlhfuhlu8/image/upload/v1702548012/location_1_cuwisl.png" className='w-[25%]' alt="" />
         <p className='py-4 pl-5 font-kal font-bold'>Parkland Amusement center</p>
         </div>
       </div>
